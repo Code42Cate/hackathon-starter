@@ -1,0 +1,18 @@
+services:
+  web:
+    build: web.Dockerfile
+    ports:
+      - "3000:3000"
+  api:
+    build: api.Dockerfile
+    ports:
+      - "3001:3001"
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+  
