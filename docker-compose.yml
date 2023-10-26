@@ -1,12 +1,47 @@
 services:
   web:
-    build: web.Dockerfile
+    build:
+      dockerfile: web.Dockerfile
     ports:
       - "3000:3000"
+    depends_on:
+      - api
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/web
+          target: /app/apps/web
+          ignore:
+            - node_modules/
+        - action: sync
+          path: ./packages/ui
+          target: /app/packages/ui
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+        - action: rebuild
+          path: ./apps/web/package.json
   api:
-    build: api.Dockerfile
+    build:
+      dockerfile: api.Dockerfile
     ports:
-      - "3001:3001"
+      - "3001:3000"
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/hackathon
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/api
+          target: /app/apps/api
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+        - action: rebuild
+          path: ./apps/api/package.json
   postgres:
     image: postgres:latest
     ports:
@@ -15,4 +50,3 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
-  

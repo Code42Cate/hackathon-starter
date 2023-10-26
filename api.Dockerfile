@@ -15,7 +15,6 @@ RUN apk add --no-cache libc6-compat
 RUN apk update
 WORKDIR /app
 
-
 # First install the dependencies (as they change less often)
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
@@ -26,21 +25,5 @@ RUN pnpm install --frozen-lockfile
 
 # Build the project
 COPY --from=builder /app/out/full/ .
-CMD pnpm dlx turbo run build --filter=api
-
-FROM base AS runner
-WORKDIR /app
-
-# Don't run production as root
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 hono
-USER hono
-
-COPY --from=installer /app/apps/api/package.json .
-
-# Automatically leverage output traces to reduce image size
-COPY --from=installer --chown=hono:nodejs /app/apps/api/.next/standalone ./
-COPY --from=installer --chown=hono:nodejs /app/apps/api/.next/static ./apps/api/.next/static
-COPY --from=installer --chown=hono:nodejs /app/apps/api/public ./apps/api/public
-
-CMD node apps/api/server.js
+# We could properly build the project here, but we don't need to because this isnt for production :)
+CMD pnpm dlx turbo run dev --filter=api
