@@ -32,6 +32,12 @@ Start everything with docker-compose:
 docker-compose watch
 ```
 
+Push database schema:
+
+```sh
+pnpm turbo db:generate                             
+```
+
 ### Add ui components
 
 Use the pre-made script:
