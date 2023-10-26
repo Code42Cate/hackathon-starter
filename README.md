@@ -1,8 +1,6 @@
-# Hackathon Boilerpalte
+# Hackathon Boilerplate
 
-![Static Badge](https://img.shields.io/badge/shadcn%2Fui-latest-blue?link=https%3A%2F%2Fgithub.com%2Fshadcn%2Fui)
-
-This is Turborepo starter with shadcn/ui pre-configured.
+This is my hackathon starter template, based on this [turborepo template](https://github.com/dan5py/turborepo-shadcn-ui)
 
 > **Note**
 > This example uses `pnpm` as package manager.

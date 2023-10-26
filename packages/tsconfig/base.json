@@ -14,7 +14,11 @@
     "noUnusedParameters": false,
     "preserveWatchOutput": true,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "paths": {
+      "@/*": ["src/*"],
+      "@db/*": ["../../packages/database/*"]
+    }
   },
   "exclude": ["node_modules"]
 }

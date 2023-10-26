@@ -2,20 +2,8 @@ import { User, columns } from "./columns";
 import { DataTable } from "./data-table";
 
 async function getData(): Promise<User[]> {
-  return [
-    {
-      id: "728ed52f",
-      name: "John Doe",
-      status: "pending",
-      email: "j@example.com",
-    },
-    {
-      id: "3b3b3b3b",
-      name: "Alice Doe",
-      status: "pending",
-      email: "a@example.com",
-    },
-  ];
+  const data = await fetch("http://api:3000/users").then((res) => res.json());
+  return data as User[];
 }
 
 export default async function Page() {

@@ -5,9 +5,12 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.2.0",
-    "hono": "^3.8.2"
+    "hono": "^3.8.2",
+    "database": "workspace:*"
   },
   "devDependencies": {
-    "tsx": "^3.12.2"
+    "tsconfig": "workspace:*",
+    "tsx": "^3.12.2",
+    "typescript": "^4.5.3"
   }
 }
