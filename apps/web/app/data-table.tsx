@@ -24,6 +24,7 @@ import { Button } from "@ui/components/ui/button";
 import { Input } from "@ui/components/ui/input";
 
 import { useState } from "react";
+import { AddUserDialog } from "./add-user";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -57,17 +58,19 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 justify-between">
         <Input
           placeholder="Filter emails..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("email")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="w-min"
         />
+
+        <AddUserDialog />
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border w-[900px]">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

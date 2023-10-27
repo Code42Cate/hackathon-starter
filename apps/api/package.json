@@ -1,7 +1,7 @@
 {
   "name": "api",
   "scripts": {
-    "dev": "tsx src/index.ts"
+    "dev": "tsx watch src/index.ts"
   },
   "dependencies": {
     "@hono/node-server": "^1.2.0",

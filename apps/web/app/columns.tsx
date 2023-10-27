@@ -8,7 +8,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@ui/components/dropdown-menu";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
@@ -16,7 +15,7 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 export type User = {
   id: string;
   email: string;
-  status: "signed_up" | "pending" | "canceled";
+  status: "active" | "pending" | "canceled";
   name: string;
 };
 
@@ -51,6 +50,23 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => {
+      const status = row.original.status;
+
+      return (
+        <span
+          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+            status === "active"
+              ? "bg-green-100 text-green-800"
+              : status === "pending"
+              ? "bg-yellow-100 text-yellow-800"
+              : "bg-red-100 text-red-800"
+          }`}
+        >
+          {status}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "email",
@@ -69,7 +85,7 @@ export const columns: ColumnDef<User>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original;
+      const user = row.original;
 
       return (
         <DropdownMenu>
@@ -80,15 +96,20 @@ export const columns: ColumnDef<User>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(user.id)}
             >
-              Copy payment ID
+              Copy Email
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                await fetch(`http://localhost:3001/users/${user.id}`, {
+                  method: "DELETE",
+                });
+              }}
+            >
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
