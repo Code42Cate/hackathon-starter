@@ -1,52 +1,52 @@
 services:
-  web:
+  web: # Next.js Frontend
     build:
-      dockerfile: web.Dockerfile
+      dockerfile: web.Dockerfile # Path to web Dockerfile
     ports:
-      - "3000:3000"
+      - "3000:3000" # Reachable on localhost:3000
     depends_on:
-      - api
+      - api # Start after the API
     develop:
       watch:
-        - action: sync
+        - action: sync # Synchronize the files on your host ./apps/web with your containers /app/apps/web when any file changes in that path
           path: ./apps/web
           target: /app/apps/web
           ignore:
             - node_modules/
-        - action: sync
+        - action: sync # Same as above but with component library
           path: ./packages/ui
           target: /app/packages/ui
           ignore:
             - node_modules/
-        - action: rebuild
+        - action: rebuild # Rebuild if the package.json changes
           path: package.json
         - action: rebuild
           path: ./apps/web/package.json
   api:
     build:
-      dockerfile: api.Dockerfile
+      dockerfile: api.Dockerfile # Path to API Dockerfile
     ports:
-      - "3001:3000"
+      - "3001:3000" # Reachable on localhost:3001, or api:3000 from within the Docker network
     depends_on:
-      - postgres
+      - postgres # Start after the database
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/hackathon
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/hackathon # Hardcoded database credentials are usually a no-go, but totally fine in this situation
     develop:
       watch:
-        - action: sync
-          path: ./apps/api
+        - action: sync # Synchronize the files on your host ./apps/api with your containers /app/apps/api when any file changes in that path
+          path: ./apps/api 
           target: /app/apps/api
           ignore:
             - node_modules/
-        - action: rebuild
+        - action: rebuild # Rebuild container if the package.json changes
           path: package.json
         - action: rebuild
           path: ./apps/api/package.json
-  postgres:
+  postgres: # Postgres Database
     image: postgres:latest
     ports:
-      - "5432:5432"
-    environment:
+      - "5432:5432" # Reachable on localhost:5432 if you want to connect with something like DataGrip
+    environment: # Again, usually not a good idea to use these hardcoded credentials but okay for a hackathon
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
